@@ -1,0 +1,118 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name = "com.core.model.impl.adjustable.dependent.bounds.DependencyPoint" table = "depend_point" discriminator-value="dp">
+
+        <id name="id" column = "dp_id" type="long" access="field">
+            <generator class="native"/>
+        </id>
+
+        <discriminator><column name="disc"></column></discriminator>
+
+        <property name = "arg" column = "arg" type = "int" access="field"/>
+        <property name="constraint" column="const_type" type="converted::com.todotask.ConstraintFieldConverter" access="field" />
+        <set name="dependencySet" table="dep_set" inverse="false" lazy="false" fetch="join" access="field" cascade="all">
+            <key unique="false">
+                <column name="dep_set_id"/>
+            </key>
+            <many-to-many entity-name="com.core.model.impl.FixedState">
+                <column name="state_id"/>
+            </many-to-many>
+        </set>
+
+        <subclass name="com.core.model.impl.adjustable.dependent.bounds.StateDependencyPoint" extends="com.core.model.impl.adjustable.dependent.bounds.DependencyPoint" discriminator-value="Sdp">
+            <many-to-one name="sideObserver"  lazy="false" fetch="join" class="com.core.model.impl.adjustable.dependent.states.DependencyStateObserver" access="field" cascade="all"></many-to-one>
+        </subclass>
+    </class>
+    <class name = "com.core.model.impl.adjustable.dependent.states.DependencyDestroyObserver" table = "destroy_observer">
+
+        <id name="id" column = "observer_id" type="long" access="field">
+            <generator class="native"/>
+        </id>
+
+        <many-to-one name="dependencyState" column="dependencystate" lazy="false" fetch="join" class="com.core.model.impl.adjustable.dependent.states.DependencyState" access="field" cascade="all"/>
+    </class>
+    <class name = "com.core.model.impl.FixedState" table = "fixedstate" >
+
+        <id name="id" column = "state_id" type="long" access="field">
+            <generator class="identity"/>
+        </id>
+
+        <property name = "state" column = "state_val" type = "boolean" access="field"/>
+        <property name = "isUndefined" column = "undefined" type = "boolean" access="field" />
+        <property name = "extinct" column = "extinct" type = "boolean" access="field"/>
+        <component name="stateRange" class="com.core.model.TimeRange" access="field">
+            <property name="start" column="start_time" type="long" access="field"></property>
+            <property name="end" column="end_time" type="long" access="field"></property>
+        </component>
+
+        <joined-subclass name="com.core.model.impl.MutableState" extends="com.core.model.impl.FixedState" >
+            <key column="state_id" on-delete="cascade"></key>
+
+            <bag name="stateObserverListeners" access="field" cascade="all">
+                <key column="state_id"></key>
+                <one-to-many class="com.core.model.impl.adjustable.dependent.states.DependencyStateObserver"/>
+            </bag>
+
+            <joined-subclass name="com.core.model.impl.BoundState" extends="com.core.model.impl.MutableState">
+                <key column="state_id" on-delete="cascade"></key>
+
+                <property name="validationFlag" column="validation_flag" type="boolean" access="field"></property>
+
+                <joined-subclass name="com.core.model.impl.adjustable.StateAdjuster" extends="com.core.model.impl.BoundState" >
+                    <key column="state_id" on-delete="cascade"></key>
+
+                    <property name="adjuster" column="adj_type" type="converted::com.todotask.AdjusterFieldConverter" access="field"/>
+
+                    <joined-subclass name="com.core.model.impl.adjustable.dependent.states.DependencyState" extends="com.core.model.impl.adjustable.StateAdjuster" >
+                        <key column="state_id" on-delete="cascade"></key>
+
+                                          
+                        <many-to-one name="sides" lazy="false" fetch="join" cascade="all" access="field" class="com.core.model.impl.adjustable.dependent.bounds.DependencySidesBoundRange"  column="side_id" unique="true"/>
+
+                        <bag name="destroyObserverList" access="field" cascade="all">
+                            <key column="state_id"></key>
+                            <one-to-many class="com.core.model.impl.adjustable.dependent.states.DependencyDestroyObserver"/>
+                        </bag>
+
+                        <joined-subclass name="com.core.model.impl.adjustable.dependent.states.impl.NoEndState" extends="com.core.model.impl.adjustable.dependent.states.DependencyState">
+                            <key column="state_id" on-delete="cascade"></key>
+                        </joined-subclass>
+
+                        <joined-subclass name="com.core.model.impl.adjustable.dependent.states.impl.RangeState" extends="com.core.model.impl.adjustable.dependent.states.DependencyState">
+                            <key column="state_id" on-delete="cascade"></key>
+                        </joined-subclass>
+                    </joined-subclass>
+
+                </joined-subclass>
+
+
+            </joined-subclass>
+
+        </joined-subclass>
+
+    </class>
+    <class name = "com.core.model.impl.adjustable.dependent.states.DependencyStateObserver" table = "dependency_observer">
+
+        <id name="id" column = "observer_id" type="long" access="field">
+            <generator class="native"/>
+        </id>
+
+       <many-to-one name="dependencyState" column="obs_state" access="field" cascade="all"/>
+        <many-to-one name="stateSide" column="dep_point" access="field" cascade="all"/>
+    </class>
+    <class name = "com.core.model.impl.adjustable.dependent.bounds.DependencySidesBoundRange" table = "depend_sides">
+
+        <id name="id" column = "sides_id" type="long" access="field">
+            <generator class="native"/>
+        </id>
+
+		<many-to-one name="startSide" lazy="false" fetch="join" cascade="all" class="com.core.model.impl.adjustable.dependent.bounds.StateDependencyPoint" access="field" column="start_side_dp" unique="true"/>
+
+        <many-to-one name="endSide" lazy="false" fetch="join" cascade="all" class="com.core.model.impl.adjustable.dependent.bounds.StateDependencyPoint" access="field" column="end_side_dp" unique="true"/>
+
+    </class>
+</hibernate-mapping>
