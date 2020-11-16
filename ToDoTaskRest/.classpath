@@ -49,11 +49,7 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/itali/Desktop/Main/dependencies/State/StateModel.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/itali/Desktop/Main/dependencies/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="C:/Users/itali/Desktop/todotaskfinalversion/lib/StateFrameworkLib/StateFramework.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
