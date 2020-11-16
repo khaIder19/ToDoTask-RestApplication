@@ -1,8 +1,6 @@
 package com.todotask.persistence.dao.impl;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -46,10 +44,10 @@ public class TokenDAOImpl implements TokenDAO{
 		}
 	}
 	
-	private static final String USER_uid = p.getProperty("dao.user.user_uid");
-	private static final String USER_token = p.getProperty("dao.user.user_token");
-	private static final String TOKEN_INSERT = p.getProperty("dao.user.sql.token_insert");
-	private static final String TOKENS_ALL_QUERY = p.getProperty("dao.user.sql.token_all");
+	private static final String USER_uid = p.getProperty("dao.token.user_uid");
+	private static final String USER_token = p.getProperty("dao.token.user_token");
+	private static final String TOKEN_INSERT = p.getProperty("dao.token.sql.token_insert");
+	private static final String TOKENS_ALL_QUERY = p.getProperty("dao.token.sql.token_all");
 	
 	public TokenDAOImpl() {
 		tokenMap = new HashMap<String, String>();

@@ -24,7 +24,7 @@ public class RangeItemValidator implements ConstraintValidator<RangeItemValid,Ra
 			if(end == null)
 				end = Instant.MAX;
 			
-			TimeRange timeRange = new TimeRange(start.getEpochSecond(), end.getEpochSecond());
+			new TimeRange(start.getEpochSecond(), end.getEpochSecond());
 			
 		}catch(RuntimeException e) {
 			arg1.buildConstraintViolationWithTemplate("Invalid timestamp format").addConstraintViolation();

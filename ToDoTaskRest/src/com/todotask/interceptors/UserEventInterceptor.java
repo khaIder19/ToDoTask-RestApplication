@@ -8,12 +8,10 @@ import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.DeliveryMode;
 import javax.jms.JMSException;
-import javax.jms.Message;
 import javax.jms.MessageProducer;
 import javax.jms.Queue;
 import javax.jms.Session;
 import javax.jms.TextMessage;
-
 import org.apache.log4j.Logger;
 import com.todotask.json.JsonUtils;
 import com.todotask.json.user.UserIdentityItemCollection;

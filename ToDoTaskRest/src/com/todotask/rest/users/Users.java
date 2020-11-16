@@ -3,7 +3,6 @@ package com.todotask.rest.users;
 import java.util.ArrayList;
 import java.util.List;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

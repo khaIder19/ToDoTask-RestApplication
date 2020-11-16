@@ -1,9 +1,7 @@
 package com.todotask.rest.auth;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.security.KeyStore;
@@ -20,8 +18,6 @@ import javax.crypto.spec.PBEKeySpec;
 import org.apache.commons.text.RandomStringGenerator;
 import org.apache.commons.text.RandomStringGenerator.Builder;
 import org.apache.log4j.Logger;
-
-import com.todotask.data.TaskRegistry;
 
 public class SecurityUtils {
 
